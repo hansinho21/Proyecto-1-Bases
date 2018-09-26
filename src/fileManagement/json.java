@@ -27,6 +27,23 @@ import org.json.simple.parser.ParseException;
  */
 public class json {
 
+    public void readJson(String address, LinkedList<EntitySet> entitySetList, LinkedList<RelationshipSets> relationshipSetList){
+        JSONParser parser = new JSONParser();
+        
+        try {
+            
+            Object obj = parser.parse(new FileReader(address));
+            
+            JSONObject jsonObject = (JSONObject) obj;
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(json.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(json.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public LinkedList<EntitySet> getEntitySets(String address) {
         LinkedList<EntitySet> entitySetList = new LinkedList<>();
 
@@ -165,21 +182,20 @@ public class json {
                     auxRelation.setDescriptiveAttributesList(new LinkedList<>());
                 }
 
-//                JSONArray participatiosEntities = (JSONArray) auxJson.get("ParticipationEntities");
-//                Iterator<JSONObject> participatiosEntitiesIterator = participatiosEntities.iterator();
-//                LinkedList<ParticipationEntity> participationEntityList = new LinkedList<>();
-//                while (relationshipSetsIterator.hasNext()) {
-//                    JSONObject auxJsonParticipation = participatiosEntitiesIterator.next();
-//                    ParticipationEntity auxParticipationEntity = new ParticipationEntity();
-//
-//                    auxParticipationEntity.setEntityName((String) auxJsonParticipation.get("EntityName"));
-//                    auxParticipationEntity.setCardinality((String) auxJsonParticipation.get("Cardinality"));
-//                    auxParticipationEntity.setParticipationType((String) auxJsonParticipation.get("ParticipationType"));
-//                
-//                    participationEntityList.add(auxParticipationEntity);
-//                }
-//                auxRelation.setParticipationEntitiesList(participationEntityList);
-                auxRelation.setParticipationEntitiesList(new LinkedList<>());
+                JSONArray participatiosEntities = (JSONArray) auxJson.get("ParticipationEntities");
+                Iterator<JSONObject> participatiosEntitiesIterator = participatiosEntities.iterator();
+                LinkedList<ParticipationEntity> participationEntityList = new LinkedList<>();
+                while (participatiosEntitiesIterator.hasNext()) {
+                    JSONObject auxJsonParticipation = participatiosEntitiesIterator.next();
+                    ParticipationEntity auxParticipationEntity = new ParticipationEntity();
+
+                    auxParticipationEntity.setEntityName((String) auxJsonParticipation.get("EntityName"));
+                    auxParticipationEntity.setCardinality((String) auxJsonParticipation.get("Cardinality"));
+                    auxParticipationEntity.setParticipationType((String) auxJsonParticipation.get("ParticipationType"));
+                
+                    participationEntityList.add(auxParticipationEntity);
+                }
+                auxRelation.setParticipationEntitiesList(participationEntityList);
                 relationshipSetsList.add(auxRelation);
             }
 

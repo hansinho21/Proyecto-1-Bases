@@ -69,14 +69,14 @@ public class RelationshipSets {
         if(!this.descriptiveAttributesList.isEmpty()){
             data += "  DescriptiveAttributes: {\n";
             for (int i = 0; i < this.descriptiveAttributesList.size(); i++) {
-                this.descriptiveAttributesList.get(i).toString();
+                data += "\t" + this.descriptiveAttributesList.get(i).toString() + "\n";
             }
         } else {
             data += "  DescriptiveAttributes: null\n";
         }
         data += "  ParticipationEntities: {\n";
         for (int i = 0; i < this.participationEntitiesList.size(); i++) {
-            this.participationEntitiesList.get(i).toString();
+            data += "\t" + this.participationEntitiesList.get(i).toString() + "\n";
         }
         data += "}";
         
