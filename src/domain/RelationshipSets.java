@@ -18,6 +18,9 @@ public class RelationshipSets {
     private LinkedList<Attribute> descriptiveAttributesList;
     private LinkedList<ParticipationEntity> participationEntitiesList;
 
+    public RelationshipSets() {
+    }
+
     public RelationshipSets(String name, String type, LinkedList<Attribute> descriptiveAttributesList, LinkedList<ParticipationEntity> participationEntitiesList) {
         this.name = name;
         this.type = type;
@@ -59,7 +62,7 @@ public class RelationshipSets {
 
     @Override
     public String toString() {
-        String data = "RelationshipSets: {\n";
+        String data = "{\n";
         
         data += "  Name: " + this.name + "\n";
         data += "  Type: " + this.type + "\n";

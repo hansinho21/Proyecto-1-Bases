@@ -1,0 +1,74 @@
+{
+  "RelationshipSets": [
+    {
+      "Name": "drives",
+      "Type": "Strong",
+      "DescriptiveAttributes": null,
+      "ParticipationEntities": [
+        {
+          "EntityName": "driver",
+          "Cardinality": "One",
+          "ParticipationType": "Partial"
+        },
+        {
+          "EntityName": "machine",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        }
+      ]
+    },
+    {
+      "Name": "is_rented",
+      "Type": "Strong",
+      "DescriptiveAttributes": [
+        {
+          "Name": "to_date",
+          "Domain": "DATETIME",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "from_date",
+          "Domain": "DATETIME",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        }
+      ],
+      "ParticipationEntities": [
+        {
+          "EntityName": "machine",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        },
+        {
+          "EntityName": "client",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        }
+      ]
+    },
+    {
+      "Name": "use_machine_in",
+      "Type": "Strong",
+      "DescriptiveAttributes": null,
+      "ParticipationEntities": [
+        {
+          "EntityName": "client",
+          "Cardinality": "One",
+          "ParticipationType": "Partial"
+        },
+        {
+          "EntityName": "machine",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        }
+      ]
+    }
+  ]
+}

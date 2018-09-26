@@ -15,6 +15,9 @@ public class ParticipationEntity {
     private String cardinality;
     private String participationType;
 
+    public ParticipationEntity() {
+    }
+
     public ParticipationEntity(String entityName, String cardinality, String participationType) {
         this.entityName = entityName;
         this.cardinality = cardinality;

@@ -7,6 +7,8 @@ package fileManagement;
 
 import domain.Attribute;
 import domain.EntitySet;
+import domain.ParticipationEntity;
+import domain.RelationshipSets;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -96,6 +98,98 @@ public class json {
         }
 
         return entitySetList;
+    }
+
+    public LinkedList<RelationshipSets> getRelationshipSets(String address) {
+        LinkedList<RelationshipSets> relationshipSetsList = new LinkedList<>();
+
+        JSONParser parser = new JSONParser();
+
+        try {
+
+            Object obj = parser.parse(new FileReader(address));
+
+            JSONObject jsonObject = (JSONObject) obj;
+
+            JSONArray relationshipSets = (JSONArray) jsonObject.get("RelationshipSets");
+            Iterator<JSONObject> relationshipSetsIterator = relationshipSets.iterator();
+
+            while (relationshipSetsIterator.hasNext()) {
+                JSONObject auxJson = relationshipSetsIterator.next();
+                RelationshipSets auxRelation = new RelationshipSets();
+
+                auxRelation.setName((String) auxJson.get("Name"));
+                auxRelation.setType((String) auxJson.get("Type"));
+
+                JSONArray descriptiveAttributes = (JSONArray) auxJson.get("DescriptiveAttributes");
+                if (descriptiveAttributes != null) {
+                    Iterator<JSONObject> descriptiveAttributesIterator = descriptiveAttributes.iterator();
+                    LinkedList<Attribute> descriptiveAttributesList = new LinkedList<>();
+                    while (descriptiveAttributesIterator.hasNext()) {
+                        JSONObject auxJsonAttributes = descriptiveAttributesIterator.next();
+                        Attribute auxAttribute = new Attribute();
+
+                        auxAttribute.setName((String) auxJsonAttributes.get("Name"));
+                        auxAttribute.setDomain((String) auxJsonAttributes.get("Domain"));
+                        auxAttribute.setType((String) auxJsonAttributes.get("Type"));
+                        if (auxAttribute.getType().equalsIgnoreCase("Composed")) {
+                            JSONArray components = (JSONArray) auxJsonAttributes.get("ComponentList");
+                            Iterator<JSONObject> componentsIterator = components.iterator();
+                            LinkedList<Attribute> componentList = new LinkedList<>();
+                            while (componentsIterator.hasNext()) {
+                                JSONObject auxJsonComponents = componentsIterator.next();
+                                Attribute auxComponent = new Attribute();
+
+                                auxComponent.setName((String) auxJsonComponents.get("Name"));
+                                auxComponent.setDomain((String) auxJsonComponents.get("Domain"));
+                                auxComponent.setType((String) auxJsonComponents.get("Type"));
+                                auxComponent.setComponentList(new LinkedList<>());
+                                auxComponent.setIsPrimary((Boolean) auxJsonComponents.get("IsPrimary"));
+                                auxComponent.setIsDiscriminator((Boolean) auxJsonComponents.get("IsDiscriminator"));
+                                auxComponent.setPrecision((long) auxJsonComponents.get("Precision"));
+
+                                componentList.add(auxComponent);
+                            }
+                            auxAttribute.setComponentList(componentList);
+                        } else {
+                            auxAttribute.setComponentList(new LinkedList<>());
+                        }
+                        auxAttribute.setIsPrimary((Boolean) auxJsonAttributes.get("IsPrimary"));
+                        auxAttribute.setIsDiscriminator((Boolean) auxJsonAttributes.get("IsDiscriminator"));
+                        auxAttribute.setPrecision((long) auxJsonAttributes.get("Precision"));
+
+                        descriptiveAttributesList.add(auxAttribute);
+                    }
+                    auxRelation.setDescriptiveAttributesList(descriptiveAttributesList);
+                } else {
+                    auxRelation.setDescriptiveAttributesList(new LinkedList<>());
+                }
+
+//                JSONArray participatiosEntities = (JSONArray) auxJson.get("ParticipationEntities");
+//                Iterator<JSONObject> participatiosEntitiesIterator = participatiosEntities.iterator();
+//                LinkedList<ParticipationEntity> participationEntityList = new LinkedList<>();
+//                while (relationshipSetsIterator.hasNext()) {
+//                    JSONObject auxJsonParticipation = participatiosEntitiesIterator.next();
+//                    ParticipationEntity auxParticipationEntity = new ParticipationEntity();
+//
+//                    auxParticipationEntity.setEntityName((String) auxJsonParticipation.get("EntityName"));
+//                    auxParticipationEntity.setCardinality((String) auxJsonParticipation.get("Cardinality"));
+//                    auxParticipationEntity.setParticipationType((String) auxJsonParticipation.get("ParticipationType"));
+//                
+//                    participationEntityList.add(auxParticipationEntity);
+//                }
+//                auxRelation.setParticipationEntitiesList(participationEntityList);
+                auxRelation.setParticipationEntitiesList(new LinkedList<>());
+                relationshipSetsList.add(auxRelation);
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(json.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(json.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return relationshipSetsList;
     }
 
     public void relationshipSets(String address) {

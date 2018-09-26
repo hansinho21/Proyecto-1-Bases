@@ -7,6 +7,7 @@ package main;
 
 import domain.Attribute;
 import domain.EntitySet;
+import domain.RelationshipSets;
 import fileManagement.json;
 import java.util.LinkedList;
 
@@ -21,10 +22,15 @@ public class ProyectoBases {
      */
     public static void main(String[] args) {
         json json = new json();
-//        json.relationshipSets("prueba2.json");
-        LinkedList<EntitySet> a = json.getEntitySets("entitySet2.json");
-        for (int i = 0; i < a.size(); i++) {
-            System.out.println(a.get(i).toString());
+
+//        LinkedList<EntitySet> a = json.getEntitySets("entitySet2.json");
+//        for (int i = 0; i < a.size(); i++) {
+//            System.out.println(a.get(i).toString());
+//        }
+        
+        LinkedList<RelationshipSets> b = json.getRelationshipSets("relationshipSets.json");
+        for (int i = 0; i < b.size(); i++) {
+            System.out.println(b.get(i).toString());
         }
        
         
