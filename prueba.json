@@ -1,0 +1,15 @@
+{
+  "Tags": [
+    "tag 1",
+    "tag 2",
+    "tag 3"
+  ],
+  "Posts": {
+    "PostZ": "lalala",
+    "PostY": "Leer un JSON",
+    "PostX": "Escribir un JSON"
+  },
+  "Temas": "Informatica",
+  "Inicio": 2012,
+  "Blog": "http://javainutil.blogspot.com"
+}

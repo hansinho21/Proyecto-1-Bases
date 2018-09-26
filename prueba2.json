@@ -1,0 +1,36 @@
+{
+  "Name": "is_rented",
+  "Type": "Strong",
+  "DescriptiveAttributes": [
+    {
+      "Name": "to_date",
+      "Domain": "DATETIME",
+      "Type": "Simple",
+      "ComponentList": null,
+      "IsPrimary": false,
+      "IsDiscriminator": false,
+      "Precision": 0
+    },
+    {
+      "Name": "from_date",
+      "Domain": "DATETIME",
+      "Type": "Simple",
+      "ComponentList": null,
+      "IsPrimary": false,
+      "IsDiscriminator": false,
+      "Precision": 0
+    }
+  ],
+  "ParticipationEntities": [
+    {
+      "EntityName": "machine",
+      "Cardinality": "Many",
+      "ParticipationType": "Partial"
+    },
+    {
+      "EntityName": "client",
+      "Cardinality": "Many",
+      "ParticipationType": "Partial"
+    }
+  ]
+}
