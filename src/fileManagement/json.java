@@ -27,22 +27,6 @@ import org.json.simple.parser.ParseException;
  */
 public class json {
 
-    public void readJson(String address, LinkedList<EntitySet> entitySetList, LinkedList<RelationshipSets> relationshipSetList){
-        JSONParser parser = new JSONParser();
-        
-        try {
-            
-            Object obj = parser.parse(new FileReader(address));
-            
-            JSONObject jsonObject = (JSONObject) obj;
-            
-            
-        } catch (IOException ex) {
-            Logger.getLogger(json.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(json.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
     public LinkedList<EntitySet> getEntitySets(String address) {
         LinkedList<EntitySet> entitySetList = new LinkedList<>();

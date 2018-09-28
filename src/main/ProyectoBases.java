@@ -8,6 +8,7 @@ package main;
 import domain.Attribute;
 import domain.EntitySet;
 import domain.RelationshipSets;
+import fileManagement.convertSql;
 import fileManagement.json;
 import java.util.LinkedList;
 
@@ -22,26 +23,28 @@ public class ProyectoBases {
      */
     public static void main(String[] args) {
         json json = new json();
+        convertSql sql = new convertSql("document (6).json");
 
-//        LinkedList<EntitySet> a = json.getEntitySets("entitySet2.json");
+        LinkedList<EntitySet> a = json.getEntitySets("document (6).json");
 //        for (int i = 0; i < a.size(); i++) {
 //            System.out.println(a.get(i).toString());
 //        }
         
-        LinkedList<RelationshipSets> b = json.getRelationshipSets("relationshipSets.json");
-        for (int i = 0; i < b.size(); i++) {
-            System.out.println(b.get(i).toString());
-        }
-       
+        System.out.println("----------------------------------------");
         
-//        LinkedList<Attribute> list = new LinkedList<>();
-//        
-//        Attribute a1 = new Attribute("first_name", "VARCHAR", "Simple", new LinkedList<Attribute>(), false, false, 100);
-//    
-//        list.add(a1);
-//        
-//        Attribute a = new Attribute("ID", "INT", "Simple", list, true, false, 0);
-//        System.out.println(a);
+        LinkedList<RelationshipSets> b = json.getRelationshipSets("document (6).json");
+//        for (int i = 0; i < b.size(); i++) {
+//            System.out.println(b.get(i).toString());
+//        }
+        
+        String string = "";
+       
+        for (int i = 0; i < a.size(); i++) {
+            string += sql.createTable(a.get(i));
+        }
+        
+        System.out.println(string);
+        
     }
     
 }
