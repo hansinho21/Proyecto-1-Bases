@@ -28,6 +28,24 @@ import org.json.simple.parser.ParseException;
 public class json {
 
     
+    public String showJson(){
+        String data = "";
+        
+        LinkedList<EntitySet> a = getEntitySets("document (6).json");
+        for (int i = 0; i < a.size(); i++) {
+            data += a.get(i).toString();
+        }
+        
+        data += "\n\n----------------\n\n";
+        
+        LinkedList<RelationshipSets> b = getRelationshipSets("document (6).json");
+        for (int i = 0; i < b.size(); i++) {
+            data += b.get(i).toString();
+        }
+        
+        return data;
+    }
+    
     public LinkedList<EntitySet> getEntitySets(String address) {
         LinkedList<EntitySet> entitySetList = new LinkedList<>();
 

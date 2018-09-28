@@ -47,11 +47,23 @@ public class convertSql {
 
         for (int i = 0; i < entitySet.getAttributesList().size(); i++) {
             Attribute auxAttribute = entitySet.getAttributesList().get(i);
-            table += "\t" + auxAttribute.getName() + " " + auxAttribute.getDomain();
-            if (auxAttribute.getPrecision() != 0) {
-                table += "(" + auxAttribute.getPrecision() + "),\n";
+            if (auxAttribute.getType().equalsIgnoreCase("Composed")) {
+                for (int j = 0; j < auxAttribute.getComponentList().size(); j++) {      
+                    Attribute compoment = auxAttribute.getComponentList().get(j);
+                    table += "\t" + compoment.getName() + " " + compoment.getDomain();
+                    if (compoment.getPrecision() != 0) {
+                        table += "(" + compoment.getPrecision() + "),\n";
+                    } else {
+                        table += ",\n";
+                    }
+                }
             } else {
-                table += ",\n";
+                table += "\t" + auxAttribute.getName() + " " + auxAttribute.getDomain();
+                if (auxAttribute.getPrecision() != 0) {
+                    table += "(" + auxAttribute.getPrecision() + "),\n";
+                } else {
+                    table += ",\n";
+                }
             }
             if (auxAttribute.isIsPrimary() == true) {
                 primaryKeyList.add(auxAttribute.getName());
