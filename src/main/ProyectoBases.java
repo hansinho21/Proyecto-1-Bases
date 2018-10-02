@@ -23,9 +23,9 @@ public class ProyectoBases {
      */
     public static void main(String[] args) {
         json json = new json();
-        convertSql sql = new convertSql("document (6).json");
+        convertSql sql = new convertSql("document (7).json");
 
-        LinkedList<EntitySet> a = json.getEntitySets("document (6).json");
+        LinkedList<EntitySet> a = json.getEntitySets("document (7).json");
 //        for (int i = 0; i < a.size(); i++) {
 //            System.out.println(a.get(i).toString());
 //        }

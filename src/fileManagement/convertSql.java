@@ -30,7 +30,8 @@ public class convertSql {
     public String createRelationshipTables(RelationshipSets relationshipSets) {
         String result = "";
 
-        result += strongRelationshipTable(relationshipSets);
+        if(relationshipSets.getType().equalsIgnoreCase("Strong"))
+            result += strongRelationshipTable(relationshipSets);
 
         return result;
     }
@@ -233,7 +234,7 @@ public class convertSql {
             }
             result += ")\n";
         }
-        
+
         result += ");\n\n";
 
         return result;
@@ -268,14 +269,13 @@ public class convertSql {
                 auxEntitySet = this.entitySetList.get(i);
             }
         }
-        boolean changed = false;
         for (int i = 0; i < auxEntitySet.getAttributesList().size(); i++) {
             Attribute auxAttribute = auxEntitySet.getAttributesList().get(i);
             if (auxAttribute.isIsPrimary() == true) {
-                if (changed == false) {
-                    auxAttribute.setName(auxAttribute.getName() + "_" + entityName);
-                }
+                String name = auxAttribute.getName();
+                auxAttribute.setName(auxAttribute.getName() + "_" + entityName);
                 primaryKeyList.add(auxAttribute);
+                auxAttribute.setName(name);
             }
         }
 

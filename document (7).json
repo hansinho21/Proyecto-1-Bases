@@ -1,0 +1,343 @@
+{
+  "EntitySets": [
+    {
+      "Name": "driver",
+      "Type": "Strong",
+      "ParentEntitySet": null,
+      "Attributes": [
+        {
+          "Name": "Id",
+          "Domain": "INT",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": true,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "hire_date",
+          "Domain": "DATETIME",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "name",
+          "Domain": "INT",
+          "Type": "Composed",
+          "ComponentList": [
+            {
+              "Name": "first_name",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            },
+            {
+              "Name": "last_name",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            }
+          ],
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "birthday",
+          "Domain": "DATETIME",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        }
+      ]
+    },
+    {
+      "Name": "machine",
+      "Type": "Strong",
+      "ParentEntitySet": null,
+      "Attributes": [
+        {
+          "Name": "Id",
+          "Domain": "INT",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": true,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "name",
+          "Domain": "VARCHAR",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 100
+        },
+        {
+          "Name": "manufacture",
+          "Domain": "VARCHAR",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 100
+        },
+        {
+          "Name": "year",
+          "Domain": "SMALLINT",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        }
+      ]
+    },
+    {
+      "Name": "crane",
+      "Type": "SubClass",
+      "ParentEntitySet": "machine",
+      "Attributes": [
+        {
+          "Name": "lifting_capacity",
+          "Domain": "INT",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "type",
+          "Domain": "VARCHAR",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 10
+        }
+      ]
+    },
+    {
+      "Name": "tipper_wagon",
+      "Type": "SubClass",
+      "ParentEntitySet": "machine",
+      "Attributes": [
+        {
+          "Name": "load_capacity",
+          "Domain": "SMALLINT",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        }
+      ]
+    },
+    {
+      "Name": "backhoe_loader",
+      "Type": "SubClass",
+      "ParentEntitySet": "machine",
+      "Attributes": [
+        {
+          "Name": "load_capacity",
+          "Domain": "SMALLINT",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        }
+      ]
+    },
+    {
+      "Name": "client",
+      "Type": "Strong",
+      "ParentEntitySet": null,
+      "Attributes": [
+        {
+          "Name": "Id",
+          "Domain": "INT",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": true,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "phone_number",
+          "Domain": "VARCHAR",
+          "Type": "Multivalued",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 20
+        },
+        {
+          "Name": "email_address",
+          "Domain": "VARCHAR",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 100
+        }
+      ]
+    },
+    {
+      "Name": "work_location",
+      "Type": "Weak",
+      "ParentEntitySet": null,
+      "Attributes": [
+        {
+          "Name": "address",
+          "Domain": "INT",
+          "Type": "Composed",
+          "ComponentList": [
+            {
+              "Name": "country",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            },
+            {
+              "Name": "state",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            },
+            {
+              "Name": "city",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            },
+            {
+              "Name": "street",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            },
+            {
+              "Name": "avenue",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            },
+            {
+              "Name": "building_number",
+              "Domain": "VARCHAR",
+              "Type": "Simple",
+              "ComponentList": null,
+              "IsPrimary": false,
+              "IsDiscriminator": false,
+              "Precision": 100
+            }
+          ],
+          "IsPrimary": false,
+          "IsDiscriminator": true,
+          "Precision": 0
+        }
+      ]
+    }
+  ],
+  "RelationshipSets": [
+    {
+      "Name": "drives",
+      "Type": "Strong",
+      "DescriptiveAttributes": null,
+      "ParticipationEntities": [
+        {
+          "EntityName": "driver",
+          "Cardinality": "One",
+          "ParticipationType": "Partial"
+        },
+        {
+          "EntityName": "machine",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        }
+      ]
+    },
+    {
+      "Name": "is_rented",
+      "Type": "Strong",
+      "DescriptiveAttributes": [
+        {
+          "Name": "to_date",
+          "Domain": "DATETIME",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        },
+        {
+          "Name": "from_date",
+          "Domain": "DATETIME",
+          "Type": "Simple",
+          "ComponentList": null,
+          "IsPrimary": false,
+          "IsDiscriminator": false,
+          "Precision": 0
+        }
+      ],
+      "ParticipationEntities": [
+        {
+          "EntityName": "machine",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        },
+        {
+          "EntityName": "client",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        }
+      ]
+    },
+    {
+      "Name": "use_machine_in",
+      "Type": "Weak",
+      "DescriptiveAttributes": null,
+      "ParticipationEntities": [
+        {
+          "EntityName": "client",
+          "Cardinality": "One",
+          "ParticipationType": "Partial"
+        },
+        {
+          "EntityName": "work_location",
+          "Cardinality": "Many",
+          "ParticipationType": "Partial"
+        }
+      ]
+    }
+  ]
+}
