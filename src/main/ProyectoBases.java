@@ -38,12 +38,21 @@ public class ProyectoBases {
 //        }
         
         String string = "";
+        String string2 = "";
        
         for (int i = 0; i < a.size(); i++) {
-            string += sql.createTable(a.get(i));
+            string += sql.createEntityTables(a.get(i));
         }
         
         System.out.println(string);
+        
+        System.out.println("----------------------------------------");
+        
+        for (int i = 0; i < b.size(); i++) {
+            string2 += sql.createRelationshipTables(b.get(i));
+        }
+        
+        System.out.println(string2);
         
     }
     

@@ -7,6 +7,7 @@ package fileManagement;
 
 import domain.Attribute;
 import domain.EntitySet;
+import domain.ParticipationEntity;
 import domain.RelationshipSets;
 import java.util.LinkedList;
 
@@ -26,7 +27,15 @@ public class convertSql {
         this.relationshipSetList = this.json.getRelationshipSets(address);
     }
 
-    public String createTable(EntitySet entitySet) {
+    public String createRelationshipTables(RelationshipSets relationshipSets) {
+        String result = "";
+
+        result += strongRelationshipTable(relationshipSets);
+
+        return result;
+    }
+
+    public String createEntityTables(EntitySet entitySet) {
 
         String result = "";
 
@@ -34,18 +43,18 @@ public class convertSql {
             result += strongEntityTable(entitySet);
         }
         if (isChildEntity(entitySet)) {
-            result += weakEntityTable(entitySet);
+            result += childEntityTable(entitySet);
         }
-        
+
         if (isWeakEntity(entitySet)) {
-            result += weakEntityTable(entitySet);
+            //result += weakEntityTable(entitySet);
         }
 
         return result;
 
     }
 
-    private String weakEntityTable(EntitySet entitySet) {
+    private String childEntityTable(EntitySet entitySet) {
         String table = "";
         LinkedList<String> primaryKeyList = new LinkedList<>();
         LinkedList<String> foreignKeyList = new LinkedList<>();
@@ -110,7 +119,7 @@ public class convertSql {
                 table += ", ";
             }
         }
-        table += ")\n";
+        table += ") REFERENCES " + entitySet.getParentEntitySet() + "\n";
 
         table += ");\n\n";
 
@@ -162,6 +171,74 @@ public class convertSql {
         return table;
     }
 
+    private String strongRelationshipTable(RelationshipSets relationshipSets) {
+        String result = "";
+        LinkedList<String> primaryKeyList = new LinkedList<>();
+
+        result += "CREATE TABLE " + relationshipSets.getName() + "(\n";
+
+        //Atributos
+        for (int i = 0; i < relationshipSets.getParticipationEntitiesList().size(); i++) {
+            ParticipationEntity auxParticipationEntity = relationshipSets.getParticipationEntitiesList().get(i);
+            LinkedList<Attribute> auxAttributeList = getPrimaryKeysEdited(auxParticipationEntity.getEntityName());
+            for (int j = 0; j < auxAttributeList.size(); j++) {
+                Attribute auxAttribute = auxAttributeList.get(j);
+                result += "\t" + auxAttribute.getName() + " " + auxAttribute.getDomain();
+                if (auxAttribute.getPrecision() != 0) {
+                    result += "(" + auxAttribute.getPrecision() + "),\n";
+                } else {
+                    result += ",\n";
+                }
+            }
+        }
+
+        //Primary key
+        for (int i = 0; i < relationshipSets.getParticipationEntitiesList().size(); i++) {
+            ParticipationEntity auxParticipationEntity = relationshipSets.getParticipationEntitiesList().get(i);
+            if (auxParticipationEntity.getCardinality().equalsIgnoreCase("many")) {
+                LinkedList<Attribute> auxPrimaryKeyList = getPrimaryKeys(auxParticipationEntity.getEntityName());
+                for (int j = 0; j < auxPrimaryKeyList.size(); j++) {
+                    primaryKeyList.add(auxPrimaryKeyList.get(j).getName());
+                }
+            }
+        }
+
+        result += "\tPRIMARY KEY (";
+        for (int i = 0; i < primaryKeyList.size(); i++) {
+            result += primaryKeyList.get(i);
+            if (i != primaryKeyList.size() - 1) {
+                result += ", ";
+            }
+        }
+        result += ")\n";
+
+        //Foreign key
+        for (int i = 0; i < relationshipSets.getParticipationEntitiesList().size(); i++) {
+            result += "\tFOREIGN KEY (";
+            ParticipationEntity auxParticipationEntity = relationshipSets.getParticipationEntitiesList().get(i);
+            LinkedList<Attribute> auxPrimaryKeyList = getPrimaryKeys(auxParticipationEntity.getEntityName());
+            LinkedList<Attribute> auxPrimaryKeyEditedList = getPrimaryKeysEdited(auxParticipationEntity.getEntityName());
+            for (int j = 0; j < auxPrimaryKeyEditedList.size(); j++) {
+                result += auxPrimaryKeyEditedList.get(j).getName();
+                if (j != auxPrimaryKeyEditedList.size() - 1) {
+                    result += ", ";
+                }
+            }
+            result += ") REFERENCES " + auxParticipationEntity.getEntityName() + " (";
+            for (int j = 0; j < auxPrimaryKeyList.size(); j++) {
+                result += auxPrimaryKeyList.get(j).getName();
+                if (j != auxPrimaryKeyList.size() - 1) {
+                    result += ", ";
+                }
+            }
+            result += ")\n";
+        }
+        
+        result += ");\n\n";
+
+        return result;
+    }
+
     private LinkedList<Attribute> getPrimaryKeys(String entityName) {
         LinkedList<Attribute> primaryKeyList = new LinkedList<>();
         EntitySet auxEntitySet = new EntitySet();
@@ -175,6 +252,29 @@ public class convertSql {
         for (int i = 0; i < auxEntitySet.getAttributesList().size(); i++) {
             Attribute auxAttribute = auxEntitySet.getAttributesList().get(i);
             if (auxAttribute.isIsPrimary() == true) {
+                primaryKeyList.add(auxAttribute);
+            }
+        }
+
+        return primaryKeyList;
+    }
+
+    private LinkedList<Attribute> getPrimaryKeysEdited(String entityName) {
+        LinkedList<Attribute> primaryKeyList = new LinkedList<>();
+        EntitySet auxEntitySet = new EntitySet();
+
+        for (int i = 0; i < this.entitySetList.size(); i++) {
+            if (entityName.equals(this.entitySetList.get(i).getName())) {
+                auxEntitySet = this.entitySetList.get(i);
+            }
+        }
+        boolean changed = false;
+        for (int i = 0; i < auxEntitySet.getAttributesList().size(); i++) {
+            Attribute auxAttribute = auxEntitySet.getAttributesList().get(i);
+            if (auxAttribute.isIsPrimary() == true) {
+                if (changed == false) {
+                    auxAttribute.setName(auxAttribute.getName() + "_" + entityName);
+                }
                 primaryKeyList.add(auxAttribute);
             }
         }
