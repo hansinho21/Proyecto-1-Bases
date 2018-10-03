@@ -13,56 +13,56 @@ import java.util.LinkedList;
  */
 public class EntitySet {
     
-    private String name;
-    private String type;
-    private String parentEntitySet; 
-    private LinkedList<Attribute> attributesList;
+    private String Name;
+    private String Type;
+    private String ParentEntitySet; 
+    private LinkedList<Attribute> Attributes;
 
     public EntitySet() {
     }
 
     public EntitySet(String name, String type, String parentEntitySet, LinkedList<Attribute> attributesList) {
-        this.name = name;
-        this.type = type;
-        this.parentEntitySet = parentEntitySet;
-        this.attributesList = attributesList;
+        this.Name = name;
+        this.Type = type;
+        this.ParentEntitySet = parentEntitySet;
+        this.Attributes = attributesList;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public String getType() {
-        return type;
+        return Type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.Type = type;
     }
 
     public String getParentEntitySet() {
-        return parentEntitySet;
+        return ParentEntitySet;
     }
 
     public void setParentEntitySet(String parentEntitySet) {
-        this.parentEntitySet = parentEntitySet;
+        this.ParentEntitySet = parentEntitySet;
     }
 
     public LinkedList<Attribute> getAttributesList() {
-        return attributesList;
+        return Attributes;
     }
 
     public void setAttributesList(LinkedList<Attribute> attributesList) {
-        this.attributesList = attributesList;
+        this.Attributes = attributesList;
     }
 
     @Override
     public String toString() {
-        return "EntitySet{" + "name=" + name + ", type=" + type + ", parentEntitySet=" + parentEntitySet + ", attributesList=" + attributesList + '}';
+        return "EntitySet{" + "name=" + Name + ", type=" + Type + ", parentEntitySet=" + ParentEntitySet + ", attributesList=" + Attributes + '}';
     }
     
     

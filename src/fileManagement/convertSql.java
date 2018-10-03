@@ -7,8 +7,10 @@ package fileManagement;
 
 import domain.Attribute;
 import domain.EntitySet;
+import domain.JsonObject;
 import domain.ParticipationEntity;
 import domain.RelationshipSets;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
 /**
@@ -20,18 +22,25 @@ public class convertSql {
     private LinkedList<EntitySet> entitySetList;
     private LinkedList<RelationshipSets> relationshipSetList;
 
-    private json json = new json();
+    private json json;
 
-    public convertSql(String address) {
-        this.entitySetList = this.json.getEntitySets(address);
-        this.relationshipSetList = this.json.getRelationshipSets(address);
+    public convertSql(String address) throws FileNotFoundException {
+        this.json = new json(address);
+        initialize();
+    }
+    
+    private void initialize() throws FileNotFoundException{
+        JsonObject jsonObject = this.json.readJson();
+        this.entitySetList = jsonObject.getEntitySets();
+        this.relationshipSetList = jsonObject.getRelationshipSets();
     }
 
     public String createRelationshipTables(RelationshipSets relationshipSets) {
         String result = "";
 
-        if(relationshipSets.getType().equalsIgnoreCase("Strong"))
+        if (relationshipSets.getType().equalsIgnoreCase("Strong")) {
             result += strongRelationshipTable(relationshipSets);
+        }
 
         return result;
     }
@@ -48,11 +57,94 @@ public class convertSql {
         }
 
         if (isWeakEntity(entitySet)) {
-            //result += weakEntityTable(entitySet);
+//            result += weakEntityTable(entitySet);
         }
 
         return result;
 
+    }
+
+    private String weakEntityTable(EntitySet entitySet) {
+        String table = "";
+        LinkedList<String> primaryKeyList = new LinkedList<>();
+        LinkedList<Attribute> foreignKeyList = new LinkedList<>();
+        EntitySet entityStrong = new EntitySet();
+
+        //Obtener entidad a la que está relacionada la entidad debil
+        for (int i = 0; i < this.relationshipSetList.size(); i++) {
+            LinkedList<ParticipationEntity> auxParticipationEntityList = this.relationshipSetList.get(i).getParticipationEntitiesList();
+            for (int j = 0; j < auxParticipationEntityList.size(); j++) {
+                if(existEntity(entitySet.getName()) == true){
+                    if(!auxParticipationEntityList.get(j).getEntityName().equals(entitySet.getName())){
+                        entityStrong = getEntitySet(auxParticipationEntityList.get(j).getEntityName());
+                    }
+                }
+            }
+        }
+        
+        LinkedList<Attribute> entityStrongKeys = getPrimaryKeysEdited(entityStrong.getName());
+
+        table += "CREATE TABLE " + entitySet.getName() + "(\n";
+
+        for (int i = 0; i < entitySet.getAttributesList().size(); i++) {
+            Attribute auxAttribute = entitySet.getAttributesList().get(i);
+            if (auxAttribute.getType().equalsIgnoreCase("Composed")) {
+                for (int j = 0; j < auxAttribute.getComponentList().size(); j++) {
+                    Attribute compoment = auxAttribute.getComponentList().get(j);
+                    table += "\t" + compoment.getName() + " " + compoment.getDomain();
+                    if (compoment.getPrecision() != 0) {
+                        table += "(" + compoment.getPrecision() + "),\n";
+                    } else {
+                        table += ",\n";
+                    }
+                    if (auxAttribute.isIsDiscriminator()) {
+                        primaryKeyList.add(compoment.getName());
+                    }
+                }
+            } else {
+                table += "\t" + auxAttribute.getName() + " " + auxAttribute.getDomain();
+                if (auxAttribute.getPrecision() != 0) {
+                    table += "(" + auxAttribute.getPrecision() + "),\n";
+                } else {
+                    table += ",\n";
+                }
+            }
+            if (auxAttribute.isIsPrimary() == true) {
+                primaryKeyList.add(auxAttribute.getName());
+            }
+        }
+
+        table += "\tPRIMARY KEY (";
+        for (int i = 0; i < primaryKeyList.size(); i++) {
+            table += primaryKeyList.get(i);
+            if (i != primaryKeyList.size() - 1) {
+                table += ", ";
+            }
+        }
+        
+        table += ", ";
+        for (int i = 0; i < entityStrongKeys.size(); i++) {
+            table += entityStrongKeys.get(i).getName();
+            if (i != entityStrongKeys.size() - 1) {
+                table += ", ";
+            }
+        }
+        table += ")\n";
+        
+        foreignKeyList = getPrimaryKeys(entityStrong.getName());
+
+        table += "\tFOREIGN KEY (";
+        for (int i = 0; i < foreignKeyList.size(); i++) {
+            table += foreignKeyList.get(i).getName();
+            if (i != foreignKeyList.size() - 1) {
+                table += ", ";
+            }
+        }
+        table += ") REFERENCES " + entityStrong.getName()+ "\n";
+
+        table += ");\n\n";
+
+        return table;
     }
 
     private String childEntityTable(EntitySet entitySet) {
@@ -239,6 +331,8 @@ public class convertSql {
 
         return result;
     }
+    
+    
 
     private LinkedList<Attribute> getPrimaryKeys(String entityName) {
         LinkedList<Attribute> primaryKeyList = new LinkedList<>();
@@ -259,6 +353,15 @@ public class convertSql {
 
         return primaryKeyList;
     }
+    
+    private EntitySet getEntitySet(String name){
+        for (int i = 0; i < this.entitySetList.size(); i++) {
+            if(this.entitySetList.get(i).getName().equals(name)){
+                return this.entitySetList.get(i);
+            }
+        }
+        return null;
+    }
 
     private LinkedList<Attribute> getPrimaryKeysEdited(String entityName) {
         LinkedList<Attribute> primaryKeyList = new LinkedList<>();
@@ -270,12 +373,13 @@ public class convertSql {
             }
         }
         for (int i = 0; i < auxEntitySet.getAttributesList().size(); i++) {
-            Attribute auxAttribute = auxEntitySet.getAttributesList().get(i);
-            if (auxAttribute.isIsPrimary() == true) {
-                String name = auxAttribute.getName();
-                auxAttribute.setName(auxAttribute.getName() + "_" + entityName);
+            Attribute attribute = auxEntitySet.getAttributesList().get(i);
+            boolean aiuda = false;
+            if (attribute.isIsPrimary() == true && aiuda == false) {
+                aiuda = true;
+                Attribute auxAttribute = attribute;
+                auxAttribute.setName(attribute.getName() + "_" + entityName);
                 primaryKeyList.add(auxAttribute);
-                auxAttribute.setName(name);
             }
         }
 
@@ -319,5 +423,17 @@ public class convertSql {
             return false;
         }
 
+    }
+
+    private boolean existEntity(String name) {
+        for (int i = 0; i < this.relationshipSetList.size(); i++) {
+            LinkedList<ParticipationEntity> auxParticipationEntityList = this.relationshipSetList.get(i).getParticipationEntitiesList();
+            for (int j = 0; j < auxParticipationEntityList.size(); j++) {
+                if(auxParticipationEntityList.get(j).getEntityName().equals(name)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -5,7 +5,23 @@
  */
 package gui;
 
+import domain.EntitySet;
+import domain.JsonObject;
+import domain.RelationshipSets;
+import fileManagement.convertSql;
 import fileManagement.json;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -13,14 +29,21 @@ import fileManagement.json;
  */
 public class MainMenu extends javax.swing.JFrame {
 
-    json json = new json();
-    
+    private json json;
+    private convertSql sql;
+    private String selectedFileName;
+
     /**
      * Creates new form MainMenu
      */
     public MainMenu() {
         initComponents();
-        this.jTextArea_JsonFile.setText(json.showJson());
+        this.setLocationRelativeTo(null);
+        this.jTextArea_JsonFile.setEditable(false);
+        this.jTextArea_Sql.setEditable(false);
+        this.jLabel1.setEnabled(false);
+        this.jLabel3.setEnabled(false);
+        this.jLabel_arrowIcon.setEnabled(false);
     }
 
     /**
@@ -32,69 +55,213 @@ public class MainMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea_JsonFile = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        jTextArea_Sql = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea_JsonFile1 = new javax.swing.JTextArea();
+        jTextArea_JsonFile = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel_arrowIcon = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextArea_Sql.setColumns(20);
+        jTextArea_Sql.setRows(5);
+        jScrollPane1.setViewportView(jTextArea_Sql);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 70, 270, 500));
 
         jTextArea_JsonFile.setColumns(20);
         jTextArea_JsonFile.setRows(5);
-        jScrollPane1.setViewportView(jTextArea_JsonFile);
+        jScrollPane2.setViewportView(jTextArea_JsonFile);
 
-        jButton1.setText("Convertir");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 270, 500));
+
+        jPanel2.setBackground(new java.awt.Color(0, 0, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("New Project");
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
             }
         });
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 160, 30));
 
-        jTextArea_JsonFile1.setColumns(20);
-        jTextArea_JsonFile1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea_JsonFile1);
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Open JSON File");
+        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 160, 30));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(448, 448, 448)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(22, 22, 22)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(580, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(314, 314, 314)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(169, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(171, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(11, 11, 11)))
-        );
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Save Project");
+        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 160, 30));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 640));
+
+        jLabel_arrowIcon.setIcon(new javax.swing.JLabel() {
+            public javax.swing.Icon getIcon() {
+                try {
+                    return new javax.swing.ImageIcon(
+                        new java.net.URL("file:/C:/Users/ACER/Desktop/Proyecto 1 Bases/blueArrow.png")
+                    );
+                } catch (java.net.MalformedURLException e) {
+                }
+                return null;
+            }
+        }.getIcon());
+        jLabel_arrowIcon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel_arrowIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_arrowIconMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel_arrowIconMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabel_arrowIconMouseExited(evt);
+            }
+        });
+        jPanel1.add(jLabel_arrowIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 260, 90, 80));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -7, 1060, 640));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jLabel_arrowIconMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_arrowIconMouseEntered
+        jLabel_arrowIcon.setIcon(new ImageIcon("blueArrow2.png"));
+    }//GEN-LAST:event_jLabel_arrowIconMouseEntered
+
+    private void jLabel_arrowIconMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_arrowIconMouseExited
+        jLabel_arrowIcon.setIcon(new ImageIcon("blueArrow.png"));
+    }//GEN-LAST:event_jLabel_arrowIconMouseExited
+
+    private void jLabel_arrowIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_arrowIconMouseClicked
+        if (!this.selectedFileName.equals("")) {
+            try {
+                this.sql = new convertSql(selectedFileName);
+                String sqlFormat = "";
+                this.json = new json(selectedFileName);
+                JsonObject jsonObject = this.json.readJson();
+                LinkedList<EntitySet> entitySetList = jsonObject.getEntitySets();
+                LinkedList<RelationshipSets> relationshipSetList = jsonObject.getRelationshipSets();
+
+                for (int i = 0; i < entitySetList.size(); i++) {
+                    sqlFormat += sql.createEntityTables(entitySetList.get(i));
+                }
+
+                for (int i = 0; i < relationshipSetList.size(); i++) {
+                    sqlFormat += sql.createRelationshipTables(relationshipSetList.get(i));
+                }
+
+                jTextArea_Sql.setText(sqlFormat);
+
+                this.jLabel3.setEnabled(true);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_jLabel_arrowIconMouseClicked
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        try {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showOpenDialog(this);
+            File archivo = fileChooser.getSelectedFile();
+            this.json = new json(selectedFileName);
+            JsonObject jsonObject = this.json.readJson();
+            jTextArea_JsonFile.setText(jsonObject.toString());
+            this.selectedFileName = archivo.getName();
+            
+            this.jLabel2.setEnabled(false);
+            this.jLabel1.setEnabled(true);
+            this.jLabel_arrowIcon.setEnabled(true);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        this.selectedFileName = "";
+        jTextArea_JsonFile.setText("");
+        jTextArea_Sql.setText("");
+
+        this.jLabel1.setEnabled(false);
+        this.jLabel2.setEnabled(true);
+        this.jLabel3.setEnabled(false);
+        this.jLabel_arrowIcon.setEnabled(false);
+    }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+
+        CrearFicheroNuevo(jTextArea_Sql.getText(), "Nuevo sql", evt);
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    public void CrearFicheroNuevo(String SCadena, String nombre, java.awt.event.MouseEvent evt) {
+        String ruta = "";
+        File archivo = null;
+        JFileChooser accion = new JFileChooser();
+        accion.setFileSelectionMode(0);
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("sql", "sql");
+        accion.setFileFilter(filtroImagen);
+        accion.setDialogTitle("Guardar archivo " + nombre);
+        accion.setSelectedFile(new File(nombre + ".sql"));
+        if (accion.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            ruta = accion.getSelectedFile().toString();
+            archivo = new File(ruta);
+            this.jTextArea_Sql.setText(archivo.getName());
+            try {
+                //Si Existe el fichero lo borra
+                if (archivo.exists()) {
+                    archivo.delete();
+                }
+                BufferedWriter wr = new BufferedWriter(new FileWriter(archivo));
+                FileWriter escribirArchivo = new FileWriter(archivo, true);
+                BufferedWriter buffer = new BufferedWriter(escribirArchivo);
+                buffer.write(SCadena);
+                buffer.newLine();
+                buffer.close();
+                wr.close();
+                escribirArchivo.close();
+
+            } catch (Exception ex) {
+            }
+
+            jLabel1MouseClicked(evt);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -112,6 +279,8 @@ public class MainMenu extends javax.swing.JFrame {
                     break;
                 }
             }
+
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -132,10 +301,15 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel_arrowIcon;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea_JsonFile;
-    private javax.swing.JTextArea jTextArea_JsonFile1;
+    private javax.swing.JTextArea jTextArea_Sql;
     // End of variables declaration//GEN-END:variables
 }

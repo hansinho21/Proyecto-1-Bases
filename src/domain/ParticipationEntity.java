@@ -11,50 +11,50 @@ package domain;
  */
 public class ParticipationEntity {
     
-    private String entityName;
-    private String cardinality;
-    private String participationType;
+    private String EntityName;
+    private String Cardinality;
+    private String ParticipationType;
 
     public ParticipationEntity() {
     }
 
     public ParticipationEntity(String entityName, String cardinality, String participationType) {
-        this.entityName = entityName;
-        this.cardinality = cardinality;
-        this.participationType = participationType;
+        this.EntityName = entityName;
+        this.Cardinality = cardinality;
+        this.ParticipationType = participationType;
     }
 
     public String getEntityName() {
-        return entityName;
+        return EntityName;
     }
 
     public void setEntityName(String entityName) {
-        this.entityName = entityName;
+        this.EntityName = entityName;
     }
 
     public String getCardinality() {
-        return cardinality;
+        return Cardinality;
     }
 
     public void setCardinality(String cardinality) {
-        this.cardinality = cardinality;
+        this.Cardinality = cardinality;
     }
 
     public String getParticipationType() {
-        return participationType;
+        return ParticipationType;
     }
 
     public void setParticipationType(String participationType) {
-        this.participationType = participationType;
+        this.ParticipationType = participationType;
     }
 
     @Override
     public String toString() {
         String data = "\t{\n";
         
-        data += "\tEntityName: " + this.entityName + "\n";
-        data += "\tCardinality: " + this.cardinality + "\n";
-        data += "\tParticipationType: " + this.participationType + "\n";
+        data += "\tEntityName: " + this.EntityName + "\n";
+        data += "\tCardinality: " + this.Cardinality + "\n";
+        data += "\tParticipationType: " + this.ParticipationType + "\n";
         data += "\t}\n";
         
         return data;

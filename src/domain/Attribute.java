@@ -13,102 +13,102 @@ import java.util.LinkedList;
  */
 public class Attribute {
     
-    private String name;
-    private String domain;
-    private String type;
-    private LinkedList<Attribute> componentList;
-    private boolean isPrimary;
-    private boolean isDiscriminator;
-    private long precision;
+    private String Name;
+    private String Domain;
+    private String Type;
+    private LinkedList<Attribute> ComponentList;
+    private boolean IsPrimary;
+    private boolean IsDiscriminator;
+    private long Precision;
 
     public Attribute() {
     }
 
     public Attribute(String name, String domain, String type, LinkedList<Attribute> componentList, boolean isPrimary, boolean isDiscriminator, long precision) {
-        this.name = name;
-        this.domain = domain;
-        this.type = type;
-        this.componentList = componentList;
-        this.isPrimary = isPrimary;
-        this.isDiscriminator = isDiscriminator;
-        this.precision = precision;
+        this.Name = name;
+        this.Domain = domain;
+        this.Type = type;
+        this.ComponentList = componentList;
+        this.IsPrimary = isPrimary;
+        this.IsDiscriminator = isDiscriminator;
+        this.Precision = precision;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public String getDomain() {
-        return domain;
+        return Domain;
     }
 
     public void setDomain(String domain) {
-        this.domain = domain;
+        this.Domain = domain;
     }
 
     public String getType() {
-        return type;
+        return Type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.Type = type;
     }
 
     public LinkedList<Attribute> getComponentList() {
-        return componentList;
+        return ComponentList;
     }
 
     public void setComponentList(LinkedList<Attribute> componentList) {
-        this.componentList = componentList;
+        this.ComponentList = componentList;
     }
 
     public boolean isIsPrimary() {
-        return isPrimary;
+        return IsPrimary;
     }
 
     public void setIsPrimary(boolean isPrimary) {
-        this.isPrimary = isPrimary;
+        this.IsPrimary = isPrimary;
     }
 
     public boolean isIsDiscriminator() {
-        return isDiscriminator;
+        return IsDiscriminator;
     }
 
     public void setIsDiscriminator(boolean isDiscriminator) {
-        this.isDiscriminator = isDiscriminator;
+        this.IsDiscriminator = isDiscriminator;
     }
 
     public long getPrecision() {
-        return precision;
+        return Precision;
     }
 
     public void setPrecision(long precision) {
-        this.precision = precision;
+        this.Precision = precision;
     }
 
     @Override
     public String toString() {
         String data = "\n{\n";
         
-        data += "\tName: " + this.name + "\n";
-        data += "\tDomain: " + this.domain + "\n";
-        data += "\tType: " + this.type + "\n";
+        data += "\tName: " + this.Name + "\n";
+        data += "\tDomain: " + this.Domain + "\n";
+        data += "\tType: " + this.Type + "\n";
         
-        if(!this.componentList.isEmpty()){
+        if(this.ComponentList != null){
             data += "\tComponentList: [\n";
-            for (int i = 0; i < this.componentList.size(); i++) {
+            for (int i = 0; i < this.ComponentList.size(); i++) {
                 data += "\t  {\n";
-                data += "\t\tName: " + this.componentList.get(i).name + "\n";
-                data += "\t\tDomain: " + this.componentList.get(i).domain + "\n";
-                data += "\t\tType: " + this.componentList.get(i).type + "\n";
+                data += "\t\tName: " + this.ComponentList.get(i).Name + "\n";
+                data += "\t\tDomain: " + this.ComponentList.get(i).Domain + "\n";
+                data += "\t\tType: " + this.ComponentList.get(i).Type + "\n";
                 data += "\t\tComponentList: null\n";
-                data += "\t\tIsPrimary: " + this.componentList.get(i).isPrimary + "\n";
-                data += "\t\tIsDiscriminator: " + this.componentList.get(i).isDiscriminator + "\n";
-                data += "\t\tPrecision: " + this.componentList.get(i).precision + "\n";
+                data += "\t\tIsPrimary: " + this.ComponentList.get(i).IsPrimary + "\n";
+                data += "\t\tIsDiscriminator: " + this.ComponentList.get(i).IsDiscriminator + "\n";
+                data += "\t\tPrecision: " + this.ComponentList.get(i).Precision + "\n";
                 data += "\t  }\n";
             }
             data += "\t]\n";
@@ -116,9 +116,9 @@ public class Attribute {
             data += "\tComponentList: null\n";
         }
         
-        data += "\tIsPrimary: " + this.isPrimary + "\n";
-        data += "\tIsDiscriminator: " + this.isDiscriminator + "\n";
-        data += "\tPrecision: " + this.precision + "\n";
+        data += "\tIsPrimary: " + this.IsPrimary + "\n";
+        data += "\tIsDiscriminator: " + this.IsDiscriminator + "\n";
+        data += "\tPrecision: " + this.Precision + "\n";
         
         data += "}";
         return data;
