@@ -62,7 +62,14 @@ public class EntitySet {
 
     @Override
     public String toString() {
-        return "EntitySet{" + "name=" + Name + ", type=" + Type + ", parentEntitySet=" + ParentEntitySet + ", attributesList=" + Attributes + '}';
+        String result = "";
+        result += "    {\n";
+        result += "      Name: " + this.Name + "\n";
+        result += "      Type: " + this.Type + "\n";
+        result += "      ParentEntitySet: " + this.ParentEntitySet + "\n";
+        result += "      Attributes: " + this.Attributes.toString() + "\n";
+        result += "      ]\n";
+        return result;
     }
     
     

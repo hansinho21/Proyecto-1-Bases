@@ -184,6 +184,10 @@ public class MainMenu extends javax.swing.JFrame {
                 for (int i = 0; i < relationshipSetList.size(); i++) {
                     sqlFormat += sql.createRelationshipTables(relationshipSetList.get(i));
                 }
+                
+                for (int i = 0; i < entitySetList.size(); i++) {
+                    sqlFormat += sql.createEntityInserts(entitySetList.get(i));
+                }
 
                 jTextArea_Sql.setText(sqlFormat);
 

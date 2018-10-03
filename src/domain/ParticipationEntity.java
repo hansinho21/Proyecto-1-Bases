@@ -50,12 +50,12 @@ public class ParticipationEntity {
 
     @Override
     public String toString() {
-        String data = "\t{\n";
+        String data = "        {\n";
         
-        data += "\tEntityName: " + this.EntityName + "\n";
-        data += "\tCardinality: " + this.Cardinality + "\n";
-        data += "\tParticipationType: " + this.ParticipationType + "\n";
-        data += "\t}\n";
+        data += "        EntityName: " + this.EntityName + "\n";
+        data += "        Cardinality: " + this.Cardinality + "\n";
+        data += "        ParticipationType: " + this.ParticipationType + "\n";
+        data += "        }\n";
         
         return data;
     }

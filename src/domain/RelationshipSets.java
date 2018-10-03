@@ -62,23 +62,24 @@ public class RelationshipSets {
 
     @Override
     public String toString() {
-        String data = "{\n";
+        String data = "    {\n";
         
-        data += "  Name: " + this.Name + "\n";
-        data += "  Type: " + this.Type + "\n";
+        data += "      Name: " + this.Name + "\n";
+        data += "      Type: " + this.Type + "\n";
         if(this.DescriptiveAttributes != null){
-            data += "  DescriptiveAttributes: {\n";
+            data += "      DescriptiveAttributes: [\n";
             for (int i = 0; i < this.DescriptiveAttributes.size(); i++) {
-                data += "\t" + this.DescriptiveAttributes.get(i).toString() + "\n";
+                data += "        " + this.DescriptiveAttributes.get(i).toString() + "\n";
             }
+            data += "      ]\n";
         } else {
-            data += "  DescriptiveAttributes: null\n";
+            data += "      DescriptiveAttributes: null\n";
         }
-        data += "  ParticipationEntities: {\n";
+        data += "      ParticipationEntities: [\n";
         for (int i = 0; i < this.ParticipationEntities.size(); i++) {
             data += "\t" + this.ParticipationEntities.get(i).toString() + "\n";
         }
-        data += "}";
+        data += "      ]";
         
         return data;
     }

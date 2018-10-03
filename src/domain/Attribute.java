@@ -92,35 +92,35 @@ public class Attribute {
 
     @Override
     public String toString() {
-        String data = "\n{\n";
+        String data = "        {\n";
         
-        data += "\tName: " + this.Name + "\n";
-        data += "\tDomain: " + this.Domain + "\n";
-        data += "\tType: " + this.Type + "\n";
+        data += "          Name: " + this.Name + "\n";
+        data += "          Domain: " + this.Domain + "\n";
+        data += "          Type: " + this.Type + "\n";
         
         if(this.ComponentList != null){
-            data += "\tComponentList: [\n";
+            data += "          ComponentList: [\n";
             for (int i = 0; i < this.ComponentList.size(); i++) {
-                data += "\t  {\n";
-                data += "\t\tName: " + this.ComponentList.get(i).Name + "\n";
-                data += "\t\tDomain: " + this.ComponentList.get(i).Domain + "\n";
-                data += "\t\tType: " + this.ComponentList.get(i).Type + "\n";
-                data += "\t\tComponentList: null\n";
-                data += "\t\tIsPrimary: " + this.ComponentList.get(i).IsPrimary + "\n";
-                data += "\t\tIsDiscriminator: " + this.ComponentList.get(i).IsDiscriminator + "\n";
-                data += "\t\tPrecision: " + this.ComponentList.get(i).Precision + "\n";
-                data += "\t  }\n";
+                data += "          {\n";
+                data += "            Name: " + this.ComponentList.get(i).Name + "\n";
+                data += "            Domain: " + this.ComponentList.get(i).Domain + "\n";
+                data += "            Type: " + this.ComponentList.get(i).Type + "\n";
+                data += "            ComponentList: null\n";
+                data += "            IsPrimary: " + this.ComponentList.get(i).IsPrimary + "\n";
+                data += "            IsDiscriminator: " + this.ComponentList.get(i).IsDiscriminator + "\n";
+                data += "            Precision: " + this.ComponentList.get(i).Precision + "\n";
+                data += "          }\n";
             }
-            data += "\t]\n";
+            data += "          ]\n";
         } else {
-            data += "\tComponentList: null\n";
+            data += "          ComponentList: null\n";
         }
         
-        data += "\tIsPrimary: " + this.IsPrimary + "\n";
-        data += "\tIsDiscriminator: " + this.IsDiscriminator + "\n";
-        data += "\tPrecision: " + this.Precision + "\n";
+        data += "          IsPrimary: " + this.IsPrimary + "\n";
+        data += "          IsDiscriminator: " + this.IsDiscriminator + "\n";
+        data += "          Precision: " + this.Precision + "\n";
         
-        data += "}";
+        data += "          }\n";
         return data;
     }
     

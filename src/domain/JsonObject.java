@@ -42,14 +42,18 @@ public class JsonObject {
 
     @Override
     public String toString() {
-        String result = "";
+        String result = "{\n";
+        result += "  EntitySets: [\n";
         for (int i = 0; i < EntitySets.size(); i++) {
             result += EntitySets.get(i).toString();
         }
-        System.out.println("--------------------");
+        result += "\n  ],\n";
+        result += "  RelationshipSets: [\n";
         for (int i = 0; i < RelationshipSets.size(); i++) {
             result += RelationshipSets.get(i).toString();
         }
+        result += "\n  ]";
+        result += "\n}";
         return result;
     }
     

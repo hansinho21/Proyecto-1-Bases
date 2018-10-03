@@ -70,7 +70,7 @@ public class ProyectoBases {
 //
 //                }
 
-                System.out.println("\n"+sql.createEntityInserts(a.get(i)));
+                System.out.println(sql.createEntityInserts(a.get(i)));
 
             }
             

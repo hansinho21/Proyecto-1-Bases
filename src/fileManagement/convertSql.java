@@ -46,12 +46,32 @@ public class convertSql {
 
     }
     
-    public String createEntityInserts(EntitySet entitySet){
+    public String createRelationshipInserts(RelationshipSets relationshipSets){
         String insert = "";
-        if(entitySet.getType().equalsIgnoreCase("strong")){
-            insert += insertStringEntity(entitySet);
-        }
         
+        
+        
+        return insert;
+    }
+
+    public String createEntityInserts(EntitySet entitySet) {
+        String insert = "";
+        if (isStrongEntity(entitySet)) {
+            for (int i = 0; i < 4; i++) {
+                insert += insertStrongEntity(entitySet);
+            }
+        }
+        if (isChildEntity(entitySet)) {
+            for (int i = 0; i < 4; i++) {
+                insert += insertChildEntity(entitySet);
+            }
+        }
+        if(isWeakEntity(entitySet)){
+            for (int i = 0; i < 4; i++) {
+                insert += insertWeakEntity(entitySet);
+            }
+        }
+
         return insert;
     }
 
@@ -377,7 +397,7 @@ public class convertSql {
         return result;
     }
 
-    public String insertStringEntity(EntitySet entitySet) {
+    public String insertStrongEntity(EntitySet entitySet) {
         String insert = "";
 
         insert += "INSERT INTO " + entitySet.getName() + "\n";
@@ -400,7 +420,7 @@ public class convertSql {
             } else if (key.getDomain().equalsIgnoreCase("datetime")) {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime now = LocalDateTime.now();
-                value = now;
+                value = "'" + dateTimeFormatter.format(now) + "'";
             } else if (key.getDomain().equalsIgnoreCase("varchar")) {
                 value = generateRandomWord(key.getPrecision());
             }
@@ -411,14 +431,14 @@ public class convertSql {
             } else {
                 insert += value + ");\n";
             }
-            
+
             cont++;
         }//linkedhashmap
 
         return insert;
     }
-    
-    public LinkedHashMap<Attribute, Object> insertStringEntity2(EntitySet entitySet) {
+
+    private String insertChildEntity(EntitySet entitySet) {
         String insert = "";
 
         insert += "INSERT INTO " + entitySet.getName() + "\n";
@@ -430,33 +450,146 @@ public class convertSql {
             Attribute key = entry.getKey();
             Object value = entry.getValue();
 
-            if (key.getDomain().equalsIgnoreCase("bigint")) {
-                value = (int) (Math.random() * 100000 + 1);
-            } else if (key.getDomain().equalsIgnoreCase("int")) {
-                value = (int) (Math.random() * 10000 + 1);
-            } else if (key.getDomain().equalsIgnoreCase("smallint")) {
-                value = (int) (Math.random() * 1000 + 1);
-            } else if (key.getDomain().equalsIgnoreCase("tinyint")) {
-                value = (int) (Math.random() * 255 + 1);
-            } else if (key.getDomain().equalsIgnoreCase("datetime")) {
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                LocalDateTime now = LocalDateTime.now();
-                value = now;
-            } else if (key.getDomain().equalsIgnoreCase("varchar")) {
-                value = generateRandomWord(key.getPrecision());
-            }
+                if (key.getDomain().equalsIgnoreCase("bigint")) {
+                    value = (int) (Math.random() * 100000 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("int")) {
+                    value = (int) (Math.random() * 10000 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("smallint")) {
+                    value = (int) (Math.random() * 1000 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("tinyint")) {
+                    value = (int) (Math.random() * 255 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("datetime")) {
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    value = "'" + dateTimeFormatter.format(now) + "'";
+                } else if (key.getDomain().equalsIgnoreCase("varchar")) {
+                    value = generateRandomWord(key.getPrecision());
+                }
+            
 
-            insert += value + ", ";
+            linkedHashMap.replace(key, value);
             if (cont != linkedHashMap.size() - 1) {
                 insert += value + ", ";
             } else {
-                insert += value + ")\n";
+                insert += value + ");\n";
             }
-            linkedHashMap.replace(key, value);
+
             cont++;
         }//linkedhashmap
 
-        return linkedHashMap;
+        return insert;
+    }
+    
+    private String insertWeakEntity(EntitySet entitySet) {
+        String insert = "";
+
+        insert += "INSERT INTO " + entitySet.getName() + "\n";
+        insert += "VALUES(";
+
+        LinkedHashMap<Attribute, Object> linkedHashMap = getAttributesMap(entitySet);
+        int cont = 0;
+        for (Map.Entry<Attribute, Object> entry : linkedHashMap.entrySet()) {
+            Attribute key = entry.getKey();
+            Object value = entry.getValue();
+
+                if (key.getDomain().equalsIgnoreCase("bigint")) {
+                    value = (int) (Math.random() * 100000 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("int")) {
+                    value = (int) (Math.random() * 10000 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("smallint")) {
+                    value = (int) (Math.random() * 1000 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("tinyint")) {
+                    value = (int) (Math.random() * 255 + 1);
+                } else if (key.getDomain().equalsIgnoreCase("datetime")) {
+                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    value = "'" + dateTimeFormatter.format(now) + "'";
+                } else if (key.getDomain().equalsIgnoreCase("varchar")) {
+                    value = generateRandomWord(key.getPrecision());
+                }
+            
+
+            linkedHashMap.replace(key, value);
+            if (cont != linkedHashMap.size() - 1) {
+                insert += value + ", ";
+            } else {
+                insert += value + ");\n";
+            }
+
+            cont++;
+        }//linkedhashmap
+
+        return insert;
+    }
+    
+//    private String insertStringRelationship(RelationshipSets relationship) {
+//        String insert = "";
+//
+//        insert += "INSERT INTO " + relationship.getName() + "\n";
+//        insert += "VALUES(";
+//
+//        LinkedHashMap<Attribute, Object> linkedHashMap = getAttributesMap(entitySet);
+//        int cont = 0;
+//        for (Map.Entry<Attribute, Object> entry : linkedHashMap.entrySet()) {
+//            Attribute key = entry.getKey();
+//            Object value = entry.getValue();
+//
+//                if (key.getDomain().equalsIgnoreCase("bigint")) {
+//                    value = (int) (Math.random() * 100000 + 1);
+//                } else if (key.getDomain().equalsIgnoreCase("int")) {
+//                    value = (int) (Math.random() * 10000 + 1);
+//                } else if (key.getDomain().equalsIgnoreCase("smallint")) {
+//                    value = (int) (Math.random() * 1000 + 1);
+//                } else if (key.getDomain().equalsIgnoreCase("tinyint")) {
+//                    value = (int) (Math.random() * 255 + 1);
+//                } else if (key.getDomain().equalsIgnoreCase("datetime")) {
+//                    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//                    LocalDateTime now = LocalDateTime.now();
+//                    value = "'" + dateTimeFormatter.format(now) + "'";
+//                } else if (key.getDomain().equalsIgnoreCase("varchar")) {
+//                    value = generateRandomWord(key.getPrecision());
+//                }
+//            
+//
+//            linkedHashMap.replace(key, value);
+//            if (cont != linkedHashMap.size() - 1) {
+//                insert += value + ", ";
+//            } else {
+//                insert += value + ");\n";
+//            }
+//
+//            cont++;
+//        }//linkedhashmap
+//
+//        return insert;
+//    }
+
+    private boolean isPrimaryFromParent(Attribute attribute) {
+        for (int i = 0; i < entitySetList.size(); i++) {
+            for (int j = 0; j < entitySetList.get(i).getAttributesList().size(); j++) {
+                if (entitySetList.get(i).getAttributesList().get(j).equals(attribute) && attribute.isIsPrimary()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Object getPrimaryKeyValue(String name) {
+        for (Map.Entry<String, LinkedHashMap<Attribute, Object>> entry : hashMapInserts.entrySet()) {
+            String key = entry.getKey();
+            LinkedHashMap<Attribute, Object> value = entry.getValue();
+            if (key.equals(name)) {
+                for (Map.Entry<Attribute, Object> entry1 : value.entrySet()) {
+                    Attribute auxKey = entry1.getKey();
+                    Object auxValue = entry1.getValue();
+                    if (auxKey.isIsPrimary() == true) {
+                        return auxValue;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public LinkedHashMap<Attribute, Object> getAttributesMap(EntitySet entitySet) {
