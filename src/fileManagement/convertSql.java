@@ -30,8 +30,8 @@ public class convertSql {
         this.json = new json(address);
         initialize();
     }
-    
-    private void initialize() throws FileNotFoundException{
+
+    private void initialize() throws FileNotFoundException {
         JsonObject jsonObject = this.json.readJson();
         this.entitySetList = jsonObject.getEntitySets();
         this.relationshipSetList = jsonObject.getRelationshipSets();
@@ -76,19 +76,30 @@ public class convertSql {
         for (int i = 0; i < this.relationshipSetList.size(); i++) {
             LinkedList<ParticipationEntity> auxParticipationEntityList = this.relationshipSetList.get(i).getParticipationEntitiesList();
             for (int j = 0; j < auxParticipationEntityList.size(); j++) {
-                if(existEntity(entitySet.getName()) == true){
+                if (existEntity(entitySet.getName()) == true) {
                     System.out.println("entré2");
-                    if(!auxParticipationEntityList.get(j).getEntityName().equals(entitySet.getName())){
+                    if (!auxParticipationEntityList.get(j).getEntityName().equals(entitySet.getName())) {
                         System.out.println("entré");
                         entityStrong = getEntitySet(auxParticipationEntityList.get(j).getEntityName());
                     }
                 }
             }
         }
-        
+
         LinkedList<Attribute> entityStrongKeys = getPrimaryKeysEdited(entityStrong.getName());
 
         table += "CREATE TABLE " + entitySet.getName() + "(\n";
+
+        LinkedList<Attribute> auxAttributeList = getPrimaryKeysEdited(entityStrong.getName());
+        for (int j = 0; j < auxAttributeList.size(); j++) {
+            Attribute auxAttribute = auxAttributeList.get(j);
+            table += "\t" + auxAttribute.getName() + " " + auxAttribute.getDomain();
+            if (auxAttribute.getPrecision() != 0) {
+                table += "(" + auxAttribute.getPrecision() + "),\n";
+            } else {
+                table += ",\n";
+            }
+        }
 
         for (int i = 0; i < entitySet.getAttributesList().size(); i++) {
             Attribute auxAttribute = entitySet.getAttributesList().get(i);
@@ -125,7 +136,7 @@ public class convertSql {
                 table += ", ";
             }
         }
-        
+
         table += ", ";
         for (int i = 0; i < entityStrongKeys.size(); i++) {
             table += entityStrongKeys.get(i).getName();
@@ -134,7 +145,7 @@ public class convertSql {
             }
         }
         table += ")\n";
-        
+
         foreignKeyList = getPrimaryKeys(entityStrong.getName());
 
         table += "\tFOREIGN KEY (";
@@ -144,7 +155,7 @@ public class convertSql {
                 table += ", ";
             }
         }
-        table += ") REFERENCES " + entityStrong.getName()+ "\n";
+        table += ") REFERENCES " + entityStrong.getName() + "\n";
 
         table += ");\n\n";
 
@@ -293,7 +304,7 @@ public class convertSql {
         for (int i = 0; i < relationshipSets.getParticipationEntitiesList().size(); i++) {
             ParticipationEntity auxParticipationEntity = relationshipSets.getParticipationEntitiesList().get(i);
             if (auxParticipationEntity.getCardinality().equalsIgnoreCase("many")) {
-                LinkedList<Attribute> auxPrimaryKeyList = getPrimaryKeys(auxParticipationEntity.getEntityName());
+                LinkedList<Attribute> auxPrimaryKeyList = getPrimaryKeysEdited(auxParticipationEntity.getEntityName());
                 for (int j = 0; j < auxPrimaryKeyList.size(); j++) {
                     primaryKeyList.add(auxPrimaryKeyList.get(j).getName());
                 }
@@ -335,10 +346,8 @@ public class convertSql {
 
         return result;
     }
-    
-    
 
-    private LinkedList<Attribute> getPrimaryKeys(String entityName) {
+    public LinkedList<Attribute> getPrimaryKeys(String entityName) {
         try {
             initialize();
         } catch (FileNotFoundException ex) {
@@ -362,17 +371,17 @@ public class convertSql {
 
         return primaryKeyList;
     }
-    
-    private EntitySet getEntitySet(String name){
+
+    private EntitySet getEntitySet(String name) {
         for (int i = 0; i < this.entitySetList.size(); i++) {
-            if(this.entitySetList.get(i).getName().equals(name)){
+            if (this.entitySetList.get(i).getName().equals(name)) {
                 return this.entitySetList.get(i);
             }
         }
         return null;
     }
 
-    private LinkedList<Attribute> getPrimaryKeysEdited(String entityName) {
+    public LinkedList<Attribute> getPrimaryKeysEdited(String entityName) {
         try {
             initialize();
         } catch (FileNotFoundException ex) {
@@ -380,7 +389,7 @@ public class convertSql {
         }
         LinkedList<Attribute> primaryKeyList = new LinkedList<>();
         EntitySet auxEntitySet = new EntitySet();
-        
+
         for (int i = 0; i < this.entitySetList.size(); i++) {
             if (entityName.equals(this.entitySetList.get(i).getName())) {
                 auxEntitySet = this.entitySetList.get(i);
@@ -443,7 +452,7 @@ public class convertSql {
         for (int i = 0; i < this.relationshipSetList.size(); i++) {
             LinkedList<ParticipationEntity> auxParticipationEntityList = this.relationshipSetList.get(i).getParticipationEntitiesList();
             for (int j = 0; j < auxParticipationEntityList.size(); j++) {
-                if(auxParticipationEntityList.get(j).getEntityName().equals(name)){
+                if (auxParticipationEntityList.get(j).getEntityName().equals(name)) {
                     return true;
                 }
             }

@@ -1,4 +1,4 @@
-﻿{
+{
   "EntitySets": [
     {
       "Name": "driver",
@@ -324,7 +324,7 @@
     },
     {
       "Name": "use_machine_in",
-      "Type": "Strong",
+      "Type": "Weak",
       "DescriptiveAttributes": null,
       "ParticipationEntities": [
         {
@@ -333,7 +333,7 @@
           "ParticipationType": "Partial"
         },
         {
-          "EntityName": "machine",
+          "EntityName": "work_location",
           "Cardinality": "Many",
           "ParticipationType": "Partial"
         }
