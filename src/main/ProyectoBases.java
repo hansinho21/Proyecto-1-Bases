@@ -13,7 +13,10 @@ import domain.RelationshipSets;
 import fileManagement.convertSql;
 import fileManagement.json;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,34 +35,54 @@ public class ProyectoBases {
             convertSql sql = new convertSql("EntityRelationshipJsonExample.json");
 
             domain.JsonObject jsonObject = json.readJson();
-
+//
             LinkedList<EntitySet> a = jsonObject.getEntitySets();
-
-            System.out.println("----------------------------------------");
-
-            LinkedList<RelationshipSets> b = jsonObject.getRelationshipSets();
-
-            String string = "";
-            String string2 = "";
-
+//
+//            System.out.println("----------------------------------------");
+//
+//            LinkedList<RelationshipSets> b = jsonObject.getRelationshipSets();
+//
+//            String string = "";
+//            String string2 = "";
+//
+//            for (int i = 0; i < a.size(); i++) {
+//                string += sql.createEntityTables(a.get(i));
+//            }
+//
+//            System.out.println(string);
+//
+//            System.out.println("----------------------------------------");
+//
+//            for (int i = 0; i < b.size(); i++) {
+//                string2 += sql.createRelationshipTables(b.get(i));
+//            }
+//
+//            System.out.println(string2);
+//
             for (int i = 0; i < a.size(); i++) {
-                string += sql.createEntityTables(a.get(i));
+                
+            
+//                HashMap<Attribute, Object> hashMap = sql.insertStringEntity2(a.get(i));
+//                for (Map.Entry<Attribute, Object> entry : hashMap.entrySet()) {
+//                    Attribute key = entry.getKey();
+//                    Object value = entry.getValue();
+//                    System.out.println(key.getName() + " (" + key.getDomain() + ") " + ": " + value);
+//
+//                }
+
+                System.out.println("\n"+sql.createEntityInserts(a.get(i)));
+
             }
-
-            System.out.println(string);
-
-            System.out.println("----------------------------------------");
-
-            for (int i = 0; i < b.size(); i++) {
-                string2 += sql.createRelationshipTables(b.get(i));
-            }
-
-            System.out.println(string2);
-
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ProyectoBases.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+
 
     }
+
+    
 
 }

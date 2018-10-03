@@ -11,7 +11,13 @@ import domain.JsonObject;
 import domain.ParticipationEntity;
 import domain.RelationshipSets;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,18 +29,30 @@ public class convertSql {
 
     private LinkedList<EntitySet> entitySetList;
     private LinkedList<RelationshipSets> relationshipSetList;
+    private LinkedHashMap<String, LinkedHashMap<Attribute, Object>> hashMapInserts;
 
     private json json;
 
     public convertSql(String address) throws FileNotFoundException {
         this.json = new json(address);
         initialize();
+        this.hashMapInserts = new LinkedHashMap<>();
     }
 
     private void initialize() throws FileNotFoundException {
         JsonObject jsonObject = this.json.readJson();
         this.entitySetList = jsonObject.getEntitySets();
         this.relationshipSetList = jsonObject.getRelationshipSets();
+
+    }
+    
+    public String createEntityInserts(EntitySet entitySet){
+        String insert = "";
+        if(entitySet.getType().equalsIgnoreCase("strong")){
+            insert += insertStringEntity(entitySet);
+        }
+        
+        return insert;
     }
 
     public String createRelationshipTables(RelationshipSets relationshipSets) {
@@ -77,9 +95,7 @@ public class convertSql {
             LinkedList<ParticipationEntity> auxParticipationEntityList = this.relationshipSetList.get(i).getParticipationEntitiesList();
             for (int j = 0; j < auxParticipationEntityList.size(); j++) {
                 if (existEntity(entitySet.getName()) == true) {
-                    System.out.println("entré2");
                     if (!auxParticipationEntityList.get(j).getEntityName().equals(entitySet.getName())) {
-                        System.out.println("entré");
                         entityStrong = getEntitySet(auxParticipationEntityList.get(j).getEntityName());
                     }
                 }
@@ -144,9 +160,9 @@ public class convertSql {
                 table += ", ";
             }
         }
-        table += ")\n";
+        table += "),\n";
 
-        foreignKeyList = getPrimaryKeys(entityStrong.getName());
+        foreignKeyList = getPrimaryKeysEdited(entityStrong.getName());
 
         table += "\tFOREIGN KEY (";
         for (int i = 0; i < foreignKeyList.size(); i++) {
@@ -155,7 +171,16 @@ public class convertSql {
                 table += ", ";
             }
         }
-        table += ") REFERENCES " + entityStrong.getName() + "\n";
+        table += ") REFERENCES " + entityStrong.getName() + "(";
+
+        LinkedList<Attribute> primaryKeyStrongEntity = getPrimaryKeys(entityStrong.getName());
+        for (int i = 0; i < primaryKeyStrongEntity.size(); i++) {
+            table += primaryKeyStrongEntity.get(i).getName();
+            if (i != foreignKeyList.size() - 1) {
+                table += ", ";
+            }
+        }
+        table += ")\n";
 
         table += ");\n\n";
 
@@ -218,7 +243,7 @@ public class convertSql {
                 table += ", ";
             }
         }
-        table += ")\n";
+        table += "),\n";
 
         table += "\tFOREIGN KEY (";
         for (int i = 0; i < foreignKeyList.size(); i++) {
@@ -318,7 +343,7 @@ public class convertSql {
                 result += ", ";
             }
         }
-        result += ")\n";
+        result += "),\n";
 
         //Foreign key
         for (int i = 0; i < relationshipSets.getParticipationEntitiesList().size(); i++) {
@@ -339,12 +364,114 @@ public class convertSql {
                     result += ", ";
                 }
             }
-            result += ")\n";
+
+            if (i != relationshipSets.getParticipationEntitiesList().size() - 1) {
+                result += "),\n";
+            } else {
+                result += ")\n";
+            }
         }
 
         result += ");\n\n";
 
         return result;
+    }
+
+    public String insertStringEntity(EntitySet entitySet) {
+        String insert = "";
+
+        insert += "INSERT INTO " + entitySet.getName() + "\n";
+        insert += "VALUES(";
+
+        LinkedHashMap<Attribute, Object> linkedHashMap = getAttributesMap(entitySet);
+        int cont = 0;
+        for (Map.Entry<Attribute, Object> entry : linkedHashMap.entrySet()) {
+            Attribute key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (key.getDomain().equalsIgnoreCase("bigint")) {
+                value = (int) (Math.random() * 100000 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("int")) {
+                value = (int) (Math.random() * 10000 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("smallint")) {
+                value = (int) (Math.random() * 1000 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("tinyint")) {
+                value = (int) (Math.random() * 255 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("datetime")) {
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime now = LocalDateTime.now();
+                value = now;
+            } else if (key.getDomain().equalsIgnoreCase("varchar")) {
+                value = generateRandomWord(key.getPrecision());
+            }
+
+            linkedHashMap.replace(key, value);
+            if (cont != linkedHashMap.size() - 1) {
+                insert += value + ", ";
+            } else {
+                insert += value + ");\n";
+            }
+            
+            cont++;
+        }//linkedhashmap
+
+        return insert;
+    }
+    
+    public LinkedHashMap<Attribute, Object> insertStringEntity2(EntitySet entitySet) {
+        String insert = "";
+
+        insert += "INSERT INTO " + entitySet.getName() + "\n";
+        insert += "VALUES(";
+
+        LinkedHashMap<Attribute, Object> linkedHashMap = getAttributesMap(entitySet);
+        int cont = 0;
+        for (Map.Entry<Attribute, Object> entry : linkedHashMap.entrySet()) {
+            Attribute key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (key.getDomain().equalsIgnoreCase("bigint")) {
+                value = (int) (Math.random() * 100000 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("int")) {
+                value = (int) (Math.random() * 10000 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("smallint")) {
+                value = (int) (Math.random() * 1000 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("tinyint")) {
+                value = (int) (Math.random() * 255 + 1);
+            } else if (key.getDomain().equalsIgnoreCase("datetime")) {
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime now = LocalDateTime.now();
+                value = now;
+            } else if (key.getDomain().equalsIgnoreCase("varchar")) {
+                value = generateRandomWord(key.getPrecision());
+            }
+
+            insert += value + ", ";
+            if (cont != linkedHashMap.size() - 1) {
+                insert += value + ", ";
+            } else {
+                insert += value + ")\n";
+            }
+            linkedHashMap.replace(key, value);
+            cont++;
+        }//linkedhashmap
+
+        return linkedHashMap;
+    }
+
+    public LinkedHashMap<Attribute, Object> getAttributesMap(EntitySet entitySet) {
+        LinkedHashMap<Attribute, Object> hashMap = new LinkedHashMap<>();
+        for (int i = 0; i < entitySet.getAttributesList().size(); i++) {
+            Attribute auxAttributeKey = entitySet.getAttributesList().get(i);
+            if (auxAttributeKey.getComponentList() != null) {
+                for (int j = 0; j < auxAttributeKey.getComponentList().size(); j++) {
+                    hashMap.put(auxAttributeKey.getComponentList().get(j), null);
+                }
+            } else {
+                hashMap.put(auxAttributeKey, null);
+            }
+        }
+        return hashMap;
     }
 
     public LinkedList<Attribute> getPrimaryKeys(String entityName) {
@@ -458,5 +585,18 @@ public class convertSql {
             }
         }
         return false;
+    }
+
+    public String generateRandomWord(long range) {
+        int wordLength = (int) (Math.random() * range + 4);
+        Random r = new Random(); // Intialize a Random Number Generator with SysTime as the seed
+        StringBuilder sb = new StringBuilder(wordLength);
+        sb.append("'");
+        for (int i = 0; i < wordLength; i++) { // For each letter in the word
+            char tmp = (char) ('a' + r.nextInt('z' - 'a')); // Generate a letter between a and z
+            sb.append(tmp); // Add it to the String
+        }
+        sb.append("'");
+        return sb.toString();
     }
 }
