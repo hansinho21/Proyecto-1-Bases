@@ -200,7 +200,9 @@ public class MainMenu extends javax.swing.JFrame {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.showOpenDialog(this);
             File archivo = fileChooser.getSelectedFile();
+            this.selectedFileName = archivo.getAbsolutePath();
             this.json = new json(selectedFileName);
+            System.out.println(selectedFileName);
             JsonObject jsonObject = this.json.readJson();
             jTextArea_JsonFile.setText(jsonObject.toString());
             this.selectedFileName = archivo.getName();
