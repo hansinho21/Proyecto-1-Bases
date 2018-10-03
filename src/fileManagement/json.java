@@ -7,23 +7,9 @@ package fileManagement;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import domain.Attribute;
-import domain.EntitySet;
 import domain.JsonObject;
-import domain.ParticipationEntity;
-import domain.RelationshipSets;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import main.ProyectoBases;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  *

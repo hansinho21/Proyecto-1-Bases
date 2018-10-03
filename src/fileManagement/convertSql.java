@@ -12,6 +12,8 @@ import domain.ParticipationEntity;
 import domain.RelationshipSets;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,7 +59,7 @@ public class convertSql {
         }
 
         if (isWeakEntity(entitySet)) {
-//            result += weakEntityTable(entitySet);
+            result += weakEntityTable(entitySet);
         }
 
         return result;
@@ -75,7 +77,9 @@ public class convertSql {
             LinkedList<ParticipationEntity> auxParticipationEntityList = this.relationshipSetList.get(i).getParticipationEntitiesList();
             for (int j = 0; j < auxParticipationEntityList.size(); j++) {
                 if(existEntity(entitySet.getName()) == true){
+                    System.out.println("entré2");
                     if(!auxParticipationEntityList.get(j).getEntityName().equals(entitySet.getName())){
+                        System.out.println("entré");
                         entityStrong = getEntitySet(auxParticipationEntityList.get(j).getEntityName());
                     }
                 }
@@ -335,6 +339,11 @@ public class convertSql {
     
 
     private LinkedList<Attribute> getPrimaryKeys(String entityName) {
+        try {
+            initialize();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(convertSql.class.getName()).log(Level.SEVERE, null, ex);
+        }
         LinkedList<Attribute> primaryKeyList = new LinkedList<>();
         EntitySet auxEntitySet = new EntitySet();
 
@@ -364,9 +373,14 @@ public class convertSql {
     }
 
     private LinkedList<Attribute> getPrimaryKeysEdited(String entityName) {
+        try {
+            initialize();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(convertSql.class.getName()).log(Level.SEVERE, null, ex);
+        }
         LinkedList<Attribute> primaryKeyList = new LinkedList<>();
         EntitySet auxEntitySet = new EntitySet();
-
+        
         for (int i = 0; i < this.entitySetList.size(); i++) {
             if (entityName.equals(this.entitySetList.get(i).getName())) {
                 auxEntitySet = this.entitySetList.get(i);
